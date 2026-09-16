@@ -1,0 +1,4 @@
+CREATE DATABASE MeuBancoDB
+GO
+
+USE MeuBancoDB
