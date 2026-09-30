@@ -24,3 +24,30 @@ LEFT JOIN Produtos AS p
 ON p.fornecedor = f.ID_Fornecedor
 GROUP BY f.ID_Fornecedor, f.nome_fornecedor
 ORDER BY Produtos DESC
+
+-- 5.Os 5 clientes que mais gastaram em pedidos entregues, com nome.
+SELECT TOP 5 c.Nome_Cliente, SUM(p.Total_do_Pedido) AS Total_Cliente
+FROM Cliente AS c
+INNER JOIN Pedidos AS p ON p.Cliente = c.ID_Cliente
+WHERE p.Status = 'Entregue'
+GROUP BY c.ID_Cliente, c.Nome_Cliente
+ORDER BY Total_Cliente DESC;
+
+-- 6.Categorias cujo preço médio de compra passa de 500.
+SELECT c.Nome_Categoria, CAST(AVG(p.preco_de_compra) AS DECIMAL(10,2)) AS Preco_Medio
+FROM Categoria AS c 
+JOIN Produtos AS p
+ON p.categoria = c.ID_Categoria
+GROUP BY c.ID_Categoria, c.Nome_Categoria
+HAVING AVG(p.preco_de_compra) > 500
+ORDER BY Preco_Medio DESC
+
+-- 7.Por país de origem: quantos fornecedores e quantos produtos.
+SELECT f.pais_de_origem, 
+COUNT(DISTINCT f.ID_Fornecedor) AS Forncedores, 
+COUNT(p.nome_produto) AS Produtos_Fornecedor
+FROM Fornecedor AS f 
+LEFT JOIN Produtos AS p 
+ON p.fornecedor = f.ID_Fornecedor
+GROUP BY f.pais_de_origem
+ORDER BY Produtos_Fornecedor DESC
